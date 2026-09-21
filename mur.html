@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0B0B0C"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..700&family=Onest:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="/pp.css"><script src="/pp.js" defer></script>
+<title>Sur mon mur — Perspective Photo. Voyez l'œuvre chez vous, à l'échelle</title>
+<meta name="description" content="Choisissez une photographie, un format et un support, et voyez-la à l'échelle dans une pièce type, de jour comme de nuit. Puis photographiez votre propre mur pour l'y placer.">
+<meta property="og:title" content="Sur mon mur — Perspective Photo"><meta property="og:image" content="https://perspective-photo-final.vercel.app/media/caraibes-diamant.jpg">
+</head>
+<body data-solid="1">
+<main id="main">
+<section class="wrap mur" id="mur">
+  <div>
+    <div class="mtabs" id="mtabs" style="margin-bottom:14px"><button class="chip" type="button" data-t="room" aria-pressed="true">La pièce type</button><button class="chip" type="button" data-t="own" aria-pressed="false">Votre mur</button></div>
+    <div class="mtab is-on" id="tab-room">
+      <div class="room" id="room" style="--wall:#DDD7CC">
+        <div class="nightv"></div><div class="lamp" id="lamp"></div>
+        <div class="sofa"><i></i></div>
+        <div class="art" id="art" data-cursor="Glisser"><img id="artimg" src="" alt=""></div>
+        <div class="scale"><i id="meter"></i>1 m</div>
+        <span class="hint" id="rhint">Glissez l'œuvre sur le mur</span>
+      </div>
+      <p class="mono" style="margin-top:12px">Le canapé mesure deux mètres. L'œuvre est affichée à l'échelle réelle du format choisi.</p>
+    </div>
+    <div class="mtab" id="tab-own">
+      <div class="ownwall" id="own">
+        <div class="ph" id="ownph"><span class="mono">Votre mur</span><p>Photographiez le mur de face, avec une feuille A4 posée dessus ou tenue contre lui. Elle sert de repère d'échelle.</p><label class="btn btn--solid">Prendre ou choisir une photo<input type="file" id="file" accept="image/*" capture="environment"></label><span class="mono">La photo reste sur votre appareil, rien n'est envoyé.</span></div>
+        <span class="steps" id="osteps">1. Ajustez le cadre orange sur la feuille A4</span>
+      </div>
+      <p class="mono" style="margin-top:12px">Sur iPhone et iPad, un bouton « Voir en réalité augmentée » remplacera cette étape dans la version finale (fichiers AR à générer par format).</p>
+    </div>
+  </div>
+  <aside class="mur__side">
+    <div><span class="eyebrow">Sur mon mur</span><h1 class="h2">À l'échelle, chez vous.</h1></div>
+    <div><span class="k">Œuvre</span><div class="thumbs" id="thumbs" style="margin-top:8px"></div></div>
+    <div><span class="k">Format</span><div class="formats" id="formats" style="margin-top:8px"></div></div>
+    <div><span class="k">Support</span><div class="support" id="support" style="margin-top:8px"><button class="opt" type="button" data-s="paper" aria-pressed="true">Fine Art<small>marge blanche</small></button><button class="opt" type="button" data-s="alu" aria-pressed="false">Aluminium<small>bord à bord</small></button></div></div>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end"><div><span class="k">Mur</span><div class="walls" id="walls" style="margin-top:8px"></div></div><div><span class="k">Lumière</span><div class="seg" id="light" style="margin-top:8px"><button type="button" data-l="day" aria-pressed="true">Jour</button><button type="button" data-l="night" aria-pressed="false">Nuit</button></div></div></div>
+    <div class="price"><div><b id="price"></b><span id="pdesc"></span></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn btn--solid" id="add" type="button">Ajouter au panier</button><a class="btn btn--ghost" id="see" href="/oeuvre">La fiche de l'œuvre</a></div>
+    <button class="btn btn--ghost" id="share" type="button">Partager cette simulation</button>
+  </aside>
+</section>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const q = new URLSearchParams(location.search); let id = q.get('w') || 'diamant', f = +(q.get('f') || 2), s = q.get('s') || 'paper', wall = q.get('mur') || '#DDD7CC', light = q.get('l') || 'day';
+  const WALLS = ['#DDD7CC','#F2EFE9','#C9C2B2','#8B8F86','#3D4B4F','#2B2B2E'];
+  const room = document.getElementById('room'), art = document.getElementById('art'), artimg = document.getElementById('artimg'), meter = document.getElementById('meter');
+  document.getElementById('thumbs').innerHTML = PP.W.map(w => '<button type="button" data-id="' + w.id + '" aria-pressed="' + (w.id === id) + '" aria-label="' + w.t + '">' + PP.img(w) + '</button>').join('');
+  document.getElementById('formats').innerHTML = PP.FORMATS.map((F, i) => '<button class="opt" type="button" data-f="' + i + '" aria-pressed="' + (i === f) + '">' + F.l + '<small>' + PP.eur(F.p) + '</small></button>').join('');
+  document.getElementById('walls').innerHTML = WALLS.map(c => '<button type="button" data-c="' + c + '" style="background:' + c + '" aria-pressed="' + (c === wall) + '" aria-label="Mur ' + c + '"></button>').join('');
+  let ax = +(q.get('x') || 50), ay = +(q.get('y') || 34), ox = +(q.get('ox') || 55), oy = +(q.get('oy') || 35);
+  const render = () => {
+    const w = PP.byId(id), F = PP.FORMATS[f], port = w.o === 'p', cmW = port ? F.h : F.w;
+    // échelle : la pièce type fait 5 m de large, le canapé 2 m
+    const rw = room.clientWidth, pxPerCm = rw / 500; document.documentElement.style.setProperty('--sofa', '40%'); meter.style.setProperty('--m', (pxPerCm * 100) + 'px');
+    art.style.setProperty('--w', (cmW * pxPerCm) + 'px'); art.style.setProperty('--pad', s === 'alu' ? '0' : (pxPerCm * 3) + 'px'); art.classList.toggle('alu', s === 'alu'); art.classList.toggle('p', port); art.style.setProperty('--x', ax + '%'); art.style.setProperty('--y', ay + '%');
+    artimg.src = w.img; artimg.alt = w.t; if (w.fallback) artimg.onerror = () => { artimg.onerror = null; artimg.src = w.fallback; };
+    room.style.setProperty('--wall', wall); room.classList.toggle('night', light === 'night'); document.getElementById('lamp').style.setProperty('--ax', ax + '%'); document.getElementById('lamp').style.setProperty('--ay', ay + '%');
+    document.querySelectorAll('#thumbs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id)); document.querySelectorAll('#formats .opt').forEach(b => b.setAttribute('aria-pressed', +b.dataset.f === f)); document.querySelectorAll('#support .opt').forEach(b => b.setAttribute('aria-pressed', b.dataset.s === s)); document.querySelectorAll('#walls button').forEach(b => b.setAttribute('aria-pressed', b.dataset.c === wall)); document.querySelectorAll('#light button').forEach(b => b.setAttribute('aria-pressed', b.dataset.l === light));
+    document.getElementById('price').textContent = PP.eur(PP.price(f, s)); document.getElementById('pdesc').textContent = w.t + ' · ' + F.l + ' · ' + (s === 'alu' ? 'aluminium' : 'Fine Art') + ' · livraison offerte'; document.getElementById('see').href = '/oeuvre?id=' + id + '&f=' + f + '&s=' + s;
+    // votre mur : même œuvre, échelle par la feuille A4
+    const own = document.getElementById('own'), oa = own.querySelector('.art'); if (oa) { const ref = own.querySelector('.ref'), refPx = ref.getBoundingClientRect().width, ppc = refPx / 21; oa.style.setProperty('--w', (cmW * ppc) + 'px'); oa.style.setProperty('--x', ox + '%'); oa.style.setProperty('--y', oy + '%'); oa.classList.toggle('alu', s === 'alu'); oa.classList.toggle('p', port); oa.querySelector('img').src = w.img; }
+    history.replaceState(null, '', '/mur?w=' + id + '&f=' + f + '&s=' + s + '&mur=' + encodeURIComponent(wall) + '&l=' + light + '&x=' + Math.round(ax) + '&y=' + Math.round(ay));
+  };
+  document.getElementById('thumbs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { id = b.dataset.id; render(); } });
+  document.getElementById('formats').addEventListener('click', e => { const b = e.target.closest('.opt'); if (b) { f = +b.dataset.f; render(); } });
+  document.getElementById('support').addEventListener('click', e => { const b = e.target.closest('.opt'); if (b) { s = b.dataset.s; render(); } });
+  document.getElementById('walls').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { wall = b.dataset.c; render(); } });
+  document.getElementById('light').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { light = b.dataset.l; render(); } });
+  // glisser l'œuvre
+  const drag = (el, box, set) => { let on = false; el.addEventListener('pointerdown', e => { on = true; el.setPointerCapture(e.pointerId); e.preventDefault(); }); el.addEventListener('pointermove', e => { if (!on) return; const r = box.getBoundingClientRect(); set(Math.max(8, Math.min(92, (e.clientX - r.left) / r.width * 100)), Math.max(8, Math.min(80, (e.clientY - r.top) / r.height * 100))); }); const up = () => on = false; el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); };
+  drag(art, room, (x, y) => { ax = x; ay = y; art.style.setProperty('--x', x + '%'); art.style.setProperty('--y', y + '%'); document.getElementById('lamp').style.setProperty('--ax', x + '%'); document.getElementById('lamp').style.setProperty('--ay', y + '%'); document.getElementById('rhint').style.opacity = 0; });
+  art.addEventListener('pointerup', () => render());
+  document.getElementById('add').onclick = () => PP.addToCart(id, f, s);
+  document.getElementById('share').onclick = async () => { const url = location.href; try { if (navigator.share) await navigator.share({title:'Sur mon mur — Perspective Photo', url}); else { await navigator.clipboard.writeText(url); PP.toast('Lien copié : ouvrez-le pour retrouver cette simulation'); } } catch (e) { PP.toast('Lien : ' + url); } };
+  // onglets
+  document.getElementById('mtabs').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; document.querySelectorAll('#mtabs .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); document.querySelectorAll('.mtab').forEach(t => t.classList.toggle('is-on', t.id === 'tab-' + b.dataset.t)); render(); });
+  // votre mur
+  const own = document.getElementById('own');
+  document.getElementById('file').addEventListener('change', e => { const file = e.target.files[0]; if (!file) return; const url = URL.createObjectURL(file); own.classList.add('has'); document.getElementById('ownph').remove(); own.insertAdjacentHTML('afterbegin', '<img class="bg" src="' + url + '" alt="Votre mur"><div class="ref" id="ref" data-cursor="Feuille A4"><span>Feuille A4, glissez et redimensionnez</span><i id="refh"></i></div><div class="art" id="oart" data-cursor="Glisser"><img src="" alt=""></div>'); const ref = document.getElementById('ref'), oart = document.getElementById('oart');
+    drag(ref, own, (x, y) => { ref.style.setProperty('--rx', x + '%'); ref.style.setProperty('--ry', y + '%'); }); ref.style.transform = 'translate(-50%,-50%)';
+    let rs = false; document.getElementById('refh').addEventListener('pointerdown', e => { rs = true; e.stopPropagation(); document.getElementById('refh').setPointerCapture(e.pointerId); }); document.getElementById('refh').addEventListener('pointermove', e => { if (!rs) return; const r = own.getBoundingClientRect(), rr = ref.getBoundingClientRect(); ref.style.setProperty('--rw', Math.max(4, Math.min(60, (e.clientX - rr.left) / r.width * 100)) + '%'); render(); }); document.getElementById('refh').addEventListener('pointerup', () => { rs = false; document.getElementById('osteps').textContent = '2. Glissez l\'œuvre où vous voulez, elle est à l\'échelle'; });
+    drag(oart, own, (x, y) => { ox = x; oy = y; oart.style.setProperty('--x', x + '%'); oart.style.setProperty('--y', y + '%'); }); render(); });
+  addEventListener('resize', render); render(); setTimeout(render, 400);
+});
+</script>
+</body>
+</html>

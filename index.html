@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0B0B0C"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..700&family=Onest:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="/pp.css"><script src="/pp.js" defer></script>
+<title>Perspective Photo — Photographies d'art en édition limitée, signées et numérotées. Joël Gourlain, Le Havre</title>
+<meta name="description" content="Tirages d'art en édition limitée de 30 exemplaires, signés et numérotés par Joël Gourlain. Fine Art Hahnemühle ou aluminium Dibond, livraison offerte. Concerts, New York, Le Havre, Caraïbes, Cyclades.">
+<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:title" content="Perspective Photo — Photographies d'art en édition limitée"><meta property="og:description" content="Trente exemplaires par photographie, signés et numérotés. Voyez l'œuvre sur votre mur avant de commander."><meta property="og:image" content="https://perspective-photo-final.vercel.app/media/ny-skyline.jpg"><meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Joël Gourlain","jobTitle":"Photographe","address":{"@type":"PostalAddress","addressLocality":"Le Havre","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Perspective Photo"}}</script>
+</head>
+<body>
+<main id="main">
+<section class="hero" id="hero" aria-label="Œuvres à la une">
+  <div class="hero__slides" id="slides"></div>
+  <div class="hero__spot" id="spot"></div>
+  <div class="hero__in">
+    <div>
+      <h1>Une œuvre,<br>pas un poster.</h1>
+      <div class="hero__cta"><a class="btn btn--solid" href="/galerie">Entrer dans la galerie</a><a class="btn btn--ghost" href="/mur">Voir sur mon mur</a></div>
+    </div>
+    <div>
+      <div class="hero__card" id="card"></div>
+      <div class="hero__nav"><button class="btn btn--icon" id="prev" aria-label="Précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></button><div class="hero__dots" id="dots"></div><button class="btn btn--icon" id="next" aria-label="Suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      <div class="hero__hint"><span class="mob">Glissez pour changer d'œuvre</span><span class="desk">, ou flèches ← →. La lumière suit votre curseur.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="manif"><p class="rv">Trente exemplaires par photographie, <b>signés et numérotés</b> au dos. Quand le trentième est vendu, l'édition est close pour toujours.</p></div>
+
+<section class="section wrap" id="univers">
+  <div class="head"><h2 class="h2 rv">Entrez par ce qui vous parle.</h2><p class="lead rv d1">Des photographies prises sur place, en reportage, jamais mises en scène. Chaque univers a sa lumière.</p></div>
+  <div class="univ" id="univ"></div>
+</section>
+
+<section class="section wrap flipwrap" id="dos">
+  <div>
+    <span class="eyebrow">Le dos du tirage</span>
+    <h2 class="h2 rv">Retournez-le.</h2>
+    <p class="lead rv d1" style="margin-top:16px">Chaque tirage porte, au dos, le titre, le numéro d'exemplaire sur trente, la date et la signature de l'auteur. C'est ce qui fait la différence entre une œuvre et une impression.</p>
+    <p class="mono rv d2" style="margin-top:18px">Cliquez sur le tirage pour voir son dos.</p>
+    <div class="dossig rv d2"><div><img src="media/signature-main.jpg" alt="Joël Gourlain signe un tirage" loading="lazy"><small>Signé à la main</small></div><div><img src="media/certificat.jpg" alt="Le certificat d'authenticité" loading="lazy"><small>Certificat d'authenticité</small></div></div>
+  </div>
+  <div>
+    <div class="flip rv" id="flip" data-cursor="Retourner" role="button" tabindex="0" aria-label="Retourner le tirage">
+      <div class="flip__in">
+        <div class="flip__face flip__front"><img src="media/ny-skyline.jpg" alt="Skyline depuis Brooklyn, tirage Fine Art" loading="lazy"></div>
+        <div class="flip__face flip__back is-photo"><img src="media/dos-signe.jpg" alt="Le dos d'un tirage : numéro d'exemplaire, signature, date et cachet" loading="lazy"><div class="lab"><b>Skyline depuis Brooklyn</b><span>Exemple d'un dos signé. Votre numéro sur 30 est attribué à la commande.</span></div></div>
+      </div>
+    </div>
+    <p class="cap">Signé, numéroté, daté · le numéro est attribué à la commande</p>
+  </div>
+</section>
+
+<section class="section wrap" id="mur-tease" style="padding-top:0">
+  <a class="tease rv" href="/mur">
+    <div class="roomv has-photo"><img class="photo" src="media/chez-vous.jpg" alt="Un tirage encadré au-dessus d'un canapé" loading="lazy"><div class="art"><img src="media/caraibes-diamant.jpg" alt="" loading="lazy"></div><div class="sofa"></div></div>
+    <div class="txt"><span class="eyebrow">Sur mon mur</span><h2>À l'échelle, chez vous.</h2><p class="lead">Le canapé mesure deux mètres. Choisissez l'œuvre, le format, le support, la couleur du mur, la lumière du jour ou de la nuit. Puis photographiez votre propre mur.</p><span class="btn btn--solid" style="justify-self:start">Essayer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+  </a>
+</section>
+
+<section class="section wrap" id="qui" style="padding-top:0">
+  <div class="who rv">
+    <img src="media/portrait.jpg" alt="Joël Gourlain, photographe" loading="lazy">
+    <div><span class="eyebrow">Le photographe</span><h3>Joël Gourlain, Le Havre.</h3><p>Reportages, concerts, art de rue et voyages : des photographies prises sur le vif, éditées en tirages d'art limités, signés et numérotés, disponibles ici exclusivement. Des Nuits Suspendues du Havre aux escaliers des Cyclades.</p></div>
+    <a class="btn btn--ghost" href="/atelier#photographe">Faire connaissance <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <div class="garant rv d1" style="margin-top:24px"><div><b>Livraison offerte</b>France et Europe</div><div><b>Emballage renforcé</b>Tube ou caisse rigide</div><div><b>Paiement sécurisé</b>CB et PayPal</div><div><b>Certificat signé</b>Numéroté, avec le tirage</div></div>
+</section>
+
+<div class="quote"><p class="rv">« La photographie n'a pas de limite, géographique, culturelle ou économique. »</p><span class="mono rv d1">Joël Gourlain, Le Havre</span></div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const HERO = ['skyline','diamant','judith-hill','oia'].map(PP.byId); let i = 0, timer;
+  const slides = document.getElementById('slides'), dots = document.getElementById('dots'), card = document.getElementById('card');
+  slides.innerHTML = HERO.map((w, k) => '<div class="hero__slide' + (k === 0 ? ' is-on' : '') + '">' + PP.img(w, '', k === 0) + '</div>').join('');
+  dots.innerHTML = HERO.map((w, k) => '<i class="' + (k === 0 ? 'is-on' : '') + '"></i>').join('');
+  const show = k => { i = (k + HERO.length) % HERO.length; document.querySelectorAll('.hero__slide').forEach((s, j) => s.classList.toggle('is-on', j === i)); document.querySelectorAll('#dots i').forEach((d, j) => d.classList.toggle('is-on', j === i)); const w = HERO[i]; card.innerHTML = '<b>' + w.t + '</b><span class="mono">' + PP.uname(w.u) + ' · ' + w.place + '</span><span class="mono">Édition limitée de 30 · à partir de ' + PP.eur(PP.FORMATS[0].p) + '</span><a href="/oeuvre?id=' + w.id + '">Voir l\'œuvre</a>'; };
+  const auto = () => { clearInterval(timer); if (!PP.reduced) timer = setInterval(() => show(i + 1), 6000); };
+  document.getElementById('prev').onclick = () => { show(i - 1); auto(); }; document.getElementById('next').onclick = () => { show(i + 1); auto(); };
+  addEventListener('keydown', e => { if (e.key === 'ArrowRight') { show(i + 1); auto(); } if (e.key === 'ArrowLeft') { show(i - 1); auto(); } });
+  const hero = document.getElementById('hero'), spot = document.getElementById('spot'); let sx = null;
+  hero.addEventListener('pointerdown', e => sx = e.clientX); hero.addEventListener('pointerup', e => { if (sx !== null && Math.abs(e.clientX - sx) > 50) { show(e.clientX < sx ? i + 1 : i - 1); auto(); } sx = null; });
+  if (PP.fine) hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); spot.style.setProperty('--x', ((e.clientX - r.left) / r.width * 100) + '%'); spot.style.setProperty('--y', ((e.clientY - r.top) / r.height * 100) + '%'); }, {passive:true});
+  else if (!PP.reduced) { let t = 0; (function drift(){ t += .004; spot.style.setProperty('--x', (50 + Math.sin(t) * 28) + '%'); spot.style.setProperty('--y', (45 + Math.cos(t * .8) * 14) + '%'); requestAnimationFrame(drift); })(); }
+  show(0); auto();
+  const U = PP.UNIV.map(([k, l]) => [k, l, PP.W.filter(w => w.u === k)]).filter(x => x[2].length);
+  const G = {concert:'concert', newyork:'newyork', street:'newyork', havrenuit:'havrenuit', caraibes:'voyage', cyclades:'voyage', nature:'voyage', portraits:'creatif', creatif:'creatif'};
+  document.getElementById('univ').innerHTML = U.slice(0, 8).map(([k, l, ws]) => '<a href="/galerie?u=' + G[k] + '">' + PP.img(ws[0]) + '<h3>' + l + '</h3><span class="mono">' + ws.length + ' œuvre' + (ws.length > 1 ? 's' : '') + '</span></a>').join('');
+  const flip = document.getElementById('flip'); const tf = () => flip.classList.toggle('is-back'); flip.onclick = tf; flip.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tf(); } });
+});
+</script>
+</body>
+</html>
