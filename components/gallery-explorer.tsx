@@ -1,10 +1,12 @@
 'use client';
 
-import { Grid3X3, Heart, Rows3 } from 'lucide-react';
+import { Grid3X3, Heart, Rows3, Ruler } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
+import { Tilt } from '@/components/motion/tilt';
+import { useSelection } from '@/components/selection-provider';
 import { euro, photos, universes } from '@/lib/photos';
 
 const groups = [
@@ -25,20 +27,17 @@ const groupMap: Record<string, string[]> = {
   creatif: ['creatif', 'portraits'],
 };
 
+const delay = (index: number) => ({ animationDelay: `${Math.min(index * 60, 540)}ms` });
+
 export function GalleryExplorer() {
   const [group, setGroup] = useState('all');
   const [mode, setMode] = useState<'grid' | 'rail'>('grid');
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const { has, toggle, count } = useSelection();
   const visible = useMemo(() => photos.filter((photo) => groupMap[group].includes(photo.universe)), [group]);
-  function toggle(slug: string) {
-    setFavorites((current) =>
-      current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug],
-    );
-  }
 
   return (
     <div>
-      <div className="flex flex-col gap-5 border-y border-white/10 py-5 md:flex-row md:items-center md:justify-between">
+      <div className="anim-rise flex flex-col gap-5 border-y border-white/10 py-5 md:flex-row md:items-center md:justify-between" style={{ animationDelay: '420ms' }}>
         <div className="flex flex-wrap gap-2">
           {groups.map(([key, label]) => (
             <button
@@ -73,60 +72,80 @@ export function GalleryExplorer() {
           </button>
         </div>
       </div>
-      <p className="mt-5 font-mono text-[10px] uppercase tracking-[.15em] text-white/34">
-        {visible.length} œuvre{visible.length > 1 ? 's' : ''} · {favorites.length} favori
-        {favorites.length > 1 ? 's' : ''}
+      <p className="mt-5 font-mono text-[10px] uppercase tracking-[.15em] text-white/60" aria-live="polite">
+        <span key={`${visible.length}-${count}`} className="anim-fade inline-block">
+          {visible.length} œuvre{visible.length > 1 ? 's' : ''} · {count} dans ma sélection
+        </span>
       </p>
       {mode === 'grid' ? (
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((photo) => (
-            <article key={photo.slug} className="group relative">
-              <Link
-                href={`/oeuvre/${photo.slug}`}
-                className={`relative block overflow-hidden rounded-[1.25rem] bg-carbon ${photo.orientation === 'portrait' ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}
-              >
-                <Image
-                  src={photo.image}
-                  alt={photo.title}
-                  fill
-                  sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw"
-                  className="object-cover transition duration-700 group-hover:scale-[1.035]"
-                />
-                <span className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
-                <div className="absolute inset-x-5 bottom-5">
-                  <p className="font-mono text-[9px] uppercase tracking-[.14em] text-acid">
-                    {universes[photo.universe]}
-                  </p>
-                  <h2 className="mt-1 text-xl font-semibold">{photo.title}</h2>
-                  <p className="mt-1 text-xs text-white/52">Dès {euro(190)}</p>
-                </div>
-              </Link>
-              <button
-                type="button"
-                onClick={() => toggle(photo.slug)}
-                aria-pressed={favorites.includes(photo.slug)}
-                aria-label={`${favorites.includes(photo.slug) ? 'Retirer' : 'Ajouter'} ${photo.title} des favoris`}
-                className={`absolute right-4 top-4 grid size-11 place-items-center rounded-full bg-black/60 backdrop-blur ${favorites.includes(photo.slug) ? 'text-coral' : 'text-white'}`}
-              >
-                <Heart className="size-5" fill={favorites.includes(photo.slug) ? 'currentColor' : 'none'} />
-              </button>
-            </article>
-          ))}
+        <div key={`grid-${group}`} className="stagger-in mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((photo, index) => {
+            const favorite = has(photo.slug);
+            return (
+              <article key={photo.slug} className="group relative" style={delay(index)}>
+                <Link
+                  href={`/mur?w=${photo.slug}`}
+                  className="absolute left-4 top-4 z-20 inline-flex h-9 items-center gap-2 rounded-full border border-white/20 bg-black/55 px-3 font-mono text-[9px] font-bold uppercase tracking-[.12em] text-white opacity-0 backdrop-blur transition-[opacity,background-color,border-color] duration-500 ease-out-expo hover:border-acid hover:bg-acid hover:text-night group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
+                  aria-label={`Voir ${photo.title} sur mon mur`}
+                >
+                  <Ruler className="size-3.5" /> Sur mon mur
+                </Link>
+                <Tilt className="relative overflow-hidden rounded-[1.25rem] bg-carbon">
+                  <Link
+                    href={`/oeuvre/${photo.slug}`}
+                    className={`relative block ${photo.orientation === 'portrait' ? 'aspect-[4/5]' : 'aspect-[4/3]'}`}
+                  >
+                    <Image
+                      src={photo.image}
+                      alt={photo.title}
+                      fill
+                      sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-1000 ease-out-expo group-hover:scale-[1.06]"
+                    />
+                    <span className="absolute inset-0 bg-gradient-to-t from-black/78 via-black/10 to-transparent opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
+                    <div className="absolute inset-x-5 bottom-5 transition-transform duration-700 ease-out-expo group-hover:-translate-y-1">
+                      <p className="font-mono text-[9px] uppercase tracking-[.14em] text-acid">
+                        {universes[photo.universe]}
+                      </p>
+                      <h2 className="mt-1 text-xl font-semibold">{photo.title}</h2>
+                      <p className="mt-1 text-xs text-white/52">Dès {euro(190)}</p>
+                    </div>
+                  </Link>
+                </Tilt>
+                <button
+                  type="button"
+                  onClick={() => toggle(photo.slug)}
+                  aria-pressed={favorite}
+                  aria-label={`${favorite ? 'Retirer' : 'Ajouter'} ${photo.title} ${favorite ? 'de' : 'à'} ma sélection`}
+                  className={`absolute right-4 top-4 z-10 grid size-11 place-items-center rounded-full bg-black/60 backdrop-blur transition-all duration-300 hover:scale-110 hover:bg-black/80 active:scale-90 ${
+                    favorite ? 'text-coral' : 'text-white'
+                  }`}
+                >
+                  <Heart
+                    key={favorite ? 'on' : 'off'}
+                    className={`size-5 ${favorite ? 'animate-pop' : ''}`}
+                    fill={favorite ? 'currentColor' : 'none'}
+                  />
+                </button>
+              </article>
+            );
+          })}
         </div>
       ) : (
-        <div className="mt-8 flex snap-x gap-5 overflow-x-auto pb-5">
-          {visible.map((photo) => (
+        <div key={`rail-${group}`} className="stagger-in mt-8 flex snap-x gap-5 overflow-x-auto pb-5">
+          {visible.map((photo, index) => (
             <Link
               key={photo.slug}
               href={`/oeuvre/${photo.slug}`}
-              className="group relative aspect-[3/4] min-w-[78vw] snap-center overflow-hidden rounded-[1.5rem] bg-carbon sm:min-w-[45vw] lg:min-w-[30vw]"
+              className="rail-item group relative aspect-[3/4] min-w-[78vw] snap-center overflow-clip rounded-[1.5rem] bg-carbon sm:min-w-[45vw] lg:min-w-[30vw]"
+              style={delay(index)}
             >
               <Image
                 src={photo.image}
                 alt={photo.title}
                 fill
                 sizes="80vw"
-                className="object-cover transition duration-700 group-hover:scale-[1.03]"
+                className="object-cover transition-transform duration-1000 ease-out-expo group-hover:scale-[1.05]"
               />
               <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute inset-x-6 bottom-6">

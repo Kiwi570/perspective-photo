@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 
+import { SelectionBar } from '@/components/selection-bar';
+import { SelectionProvider } from '@/components/selection-provider';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { siteUrl } from '@/lib/site';
@@ -37,14 +39,21 @@ const schema = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr" className={geist.variable} data-scroll-behavior="smooth">
+    <html lang="fr" className={geist.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body>
+        {/* Pose la classe .js avant le premier rendu : les éléments révélés au scroll
+            ne sont masqués que si le JS est bien là (voir globals.css). */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <a href="#main" className="skip-link">
           Aller au contenu
         </a>
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <div className="scroll-progress" aria-hidden="true" />
+        <SelectionProvider>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+          <SelectionBar />
+        </SelectionProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       </body>
     </html>

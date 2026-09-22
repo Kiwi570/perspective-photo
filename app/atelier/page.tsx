@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight, BadgeCheck, Camera, MapPin, Printer } from 'lucide-react';
+import { ArrowUpRight, BadgeCheck, Camera, MapPin, Plus, Printer } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Lines } from '@/components/motion/lines';
+import { Reveal } from '@/components/motion/reveal';
+import { Spotlight } from '@/components/motion/spotlight';
 import { social } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -26,23 +29,36 @@ const faq = [
   },
 ];
 
+const pillars = [
+  { icon: Camera, title: 'Pris sur le vif', text: 'Reportage, scène et voyage sans mise en scène.' },
+  { icon: Printer, title: 'Tiré à la commande', text: 'Fine Art Hahnemühle ou aluminium Dibond.' },
+  { icon: BadgeCheck, title: 'Édition contrôlée', text: 'Signée, numérotée et close au trentième exemplaire.' },
+];
+
 export default function StudioPage() {
   return (
     <main id="main">
-      <section className="grid-lines px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
+      <Spotlight className="grid-lines overflow-clip px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
         <div className="mx-auto grid max-w-[1450px] items-center gap-12 lg:grid-cols-[.85fr_1.15fr]">
-          <div>
-            <p className="eyebrow">L’atelier</p>
+          <div className="hero-seq">
+            <p className="eyebrow" style={{ animationDelay: '60ms' }}>
+              L’atelier
+            </p>
             <h1 className="mt-6 text-[clamp(4rem,8vw,8.5rem)] font-semibold leading-[.82] tracking-[-.07em]">
-              Le photographe,
-              <br />
-              <span className="text-acid">le tirage, l’édition.</span>
+              <Lines
+                lines={[
+                  'Le photographe,',
+                  <span key="accent" className="text-acid">
+                    le tirage, l’édition.
+                  </span>,
+                ]}
+              />
             </h1>
-            <p className="mt-7 max-w-xl text-lg leading-8 text-white/52">
+            <p className="mt-7 max-w-xl text-lg leading-8 text-white/52" style={{ animationDelay: '440ms' }}>
               Joël Gourlain photographie les concerts, les villes et les voyages tels qu’ils arrivent : sans
               mise en scène, avec la lumière disponible.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3" style={{ animationDelay: '560ms' }}>
               <Link href="/galerie" className="button-acid">
                 Voir les œuvres
               </Link>
@@ -51,41 +67,39 @@ export default function StudioPage() {
               </a>
             </div>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem]">
+          <div className="anim-scale relative aspect-[4/3] overflow-clip rounded-[2rem] bg-carbon" style={{ animationDelay: '240ms' }}>
             <Image
               src="/media/portrait.jpg"
               alt="Joël Gourlain, photographe"
               fill
               priority
               sizes="(max-width:1024px) 100vw, 55vw"
-              className="object-cover"
+              className="parallax object-cover"
             />
           </div>
         </div>
-      </section>
+      </Spotlight>
       <section className="bg-fog px-5 py-20 text-night sm:px-8 sm:py-28 lg:px-12">
         <div className="mx-auto max-w-[1300px]">
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              [Camera, 'Pris sur le vif', 'Reportage, scène et voyage sans mise en scène.'],
-              [Printer, 'Tiré à la commande', 'Fine Art Hahnemühle ou aluminium Dibond.'],
-              [BadgeCheck, 'Édition contrôlée', 'Signée, numérotée et close au trentième exemplaire.'],
-            ].map(([Icon, title, text]) => {
-              const I = Icon as typeof Camera;
-              return (
-                <article key={title as string} className="rounded-[1.5rem] bg-white p-8">
-                  <I className="size-6" />
-                  <h2 className="mt-7 text-3xl font-semibold">{title as string}</h2>
-                  <p className="mt-4 text-sm leading-7 text-night/52">{text as string}</p>
-                </article>
-              );
-            })}
-          </div>
+          <Reveal stagger={140} y={36} className="grid gap-4 md:grid-cols-3">
+            {pillars.map(({ icon: Icon, title, text }) => (
+              <article
+                key={title}
+                className="group rounded-[1.5rem] bg-white p-8 transition-[transform,box-shadow] duration-500 ease-out-expo hover:-translate-y-1 hover:shadow-[0_30px_70px_rgba(9,10,12,0.12)]"
+              >
+                <span className="grid size-12 place-items-center rounded-full bg-fog transition-colors duration-500 group-hover:bg-acid">
+                  <Icon className="size-5" />
+                </span>
+                <h2 className="mt-7 text-3xl font-semibold">{title}</h2>
+                <p className="mt-4 text-sm leading-7 text-night/52">{text}</p>
+              </article>
+            ))}
+          </Reveal>
         </div>
       </section>
       <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
         <div className="mx-auto grid max-w-[1450px] items-center gap-12 lg:grid-cols-2">
-          <div className="grid grid-cols-2 gap-4">
+          <Reveal stagger={180} y={48} className="grid grid-cols-2 gap-4">
             <Image
               src="/media/signature-main.jpg"
               alt="Signature d’un tirage"
@@ -100,8 +114,8 @@ export default function StudioPage() {
               height={784}
               className="mt-12 aspect-square rounded-[1.5rem] object-cover"
             />
-          </div>
-          <div>
+          </Reveal>
+          <Reveal stagger={110} delay={120}>
             <p className="eyebrow">Le dos du tirage</p>
             <h2 className="mt-5 text-[clamp(3.5rem,6vw,6rem)] font-semibold leading-[.86] tracking-[-.06em]">
               Ce qui transforme une image en œuvre.
@@ -113,21 +127,28 @@ export default function StudioPage() {
             <p className="mt-7 flex items-center gap-3 text-sm font-bold">
               <MapPin className="size-5 text-acid" /> Préparé et signé au Havre
             </p>
-          </div>
+          </Reveal>
         </div>
       </section>
       <section className="bg-carbon px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-[1000px]">
-          <p className="eyebrow">Questions</p>
-          <h2 className="mt-5 text-5xl font-semibold tracking-[-.05em]">Ce qu’il faut savoir.</h2>
-          <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
+          <Reveal stagger={110}>
+            <p className="eyebrow">Questions</p>
+            <h2 className="mt-5 text-5xl font-semibold tracking-[-.05em]">Ce qu’il faut savoir.</h2>
+          </Reveal>
+          <Reveal stagger={110} y={20} className="mt-10 divide-y divide-white/10 border-y border-white/10">
             {faq.map((item) => (
               <details key={item.q} className="group py-5">
-                <summary className="cursor-pointer list-none pr-8 text-lg font-semibold">{item.q}</summary>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-semibold transition-colors duration-300 hover:text-acid">
+                  {item.q}
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-white/15 transition-[transform,border-color,background-color] duration-500 ease-out-expo group-open:rotate-45 group-open:border-acid group-open:bg-acid group-open:text-night">
+                    <Plus className="size-4" />
+                  </span>
+                </summary>
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-white/48">{item.a}</p>
               </details>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
     </main>
